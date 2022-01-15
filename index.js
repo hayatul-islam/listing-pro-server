@@ -25,7 +25,19 @@ async function run() {
 
         // post category
         app.post('/addCategory', async (req, res) => {
-            const result = await categoryCollection.insertOne(req.body);
+
+            const name = req.body.name;
+            const CategoryImage = req.files.image;
+
+            const picImg = CategoryImage.data;
+            const mainImg = picImg.toString("base64");
+            const image = Buffer.from(mainImg, "base64");
+
+            const category = {
+                name,
+                image
+            };
+            const result = await categoryCollection.insertOne(category);
             res.json(result);
         });
 
@@ -85,7 +97,6 @@ async function run() {
                 bannerImg2,
                 bannerImg3,
             };
-            console.log(listing);
 
             const result = await listingCollection.insertOne(listing);
             res.send(result);
